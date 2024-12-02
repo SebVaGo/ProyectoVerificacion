@@ -1,0 +1,80 @@
+pipeline {
+    agent any
+    tools {
+        jdk 'JAVA'
+        nodejs 'node'
+    }
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    stages {
+        stage("Git Checkout") {
+            steps {
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/SebVaGo/ProyectoVerificacion.git'
+            }
+        }
+        stage("Frontend Pipeline") {
+            steps {
+                script {
+                    dir('AgroFront') {
+                        stage("SonarQube Analysis: Frontend") {
+                            bat "$SCANNER_HOME/bin/sonar-scanner -Dsonar.url=http://localhost:9000/ \
+                                -Dsonar.login=squ_b246e7697ec316793fd6f650f64722f6eb5a559a \
+                                -Dsonar.projectKey=frontend-agroweb \
+                                -Dsonar.projectName=frontend-agroweb \
+                                -Dsonar.sources=. \
+                                -Dsonar.language=js \
+                                -Dsonar.sourceEncoding=UTF-8"
+                        }
+                        stage("Install Dependencies: Frontend") {
+                            bat "npm install"
+                        }
+                        stage("Run Tests: Frontend") {
+                            bat "npm test"
+                        }
+                        stage("Build Frontend") {
+                            bat "npm run build"
+                        }
+                        stage("Start Frontend in Background") {
+                            echo "Starting frontend in background..."
+                            bat "start cmd /c npm run dev" // Ejecuta npm run dev en segundo plano en Windows
+                        }
+                    }
+                }
+            }
+        }
+        stage("Backend Pipeline") {
+            steps {
+                script {
+                    dir('AgroWeb') {
+                        stage("SonarQube Analysis: Backend") {
+                            bat "$SCANNER_HOME/bin/sonar-scanner -Dsonar.url=http://localhost:9000/ \
+                                -Dsonar.login=squ_b246e7697ec316793fd6f650f64722f6eb5a559a \
+                                -Dsonar.projectKey=backend-agroweb \
+                                -Dsonar.projectName=backend-agroweb \
+                                -Dsonar.sources=. \
+                                -Dsonar.language=js \
+                                -Dsonar.sourceEncoding=UTF-8"
+                        }
+                        stage("Install Dependencies: Backend") {
+                            bat "npm install"
+                        }
+                        stage("Run Tests: Backend") {
+                            bat "npm test"
+                        }
+                        stage("Start Backend in Background") {
+                            echo "Starting backend in background..."
+                            bat "start cmd /c npm start" // Ejecuta npm start en segundo plano en Windows
+                        }
+                    }
+                }
+            }
+        }
+        stage("Final Wait") {
+            steps {
+                echo "Pipeline completed. Waiting for 30 seconds before exiting..."
+                sleep(time: 30, unit: 'SECONDS') // Espera 30 segundos antes de finalizar
+            }
+        }
+    }
+}
