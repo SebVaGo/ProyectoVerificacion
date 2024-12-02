@@ -26,12 +26,10 @@ const ProductDescription = require('./services/routes/MainPage/ProductDescriptio
 const AveragePrice = require('./services/routes/MainPage/AveragePriceRoute');
 
 const app = express();
-const PORT = process.env.PORT || 5000; // PORT en vez de DB_PORT
+const PORT = process.env.PORT || 5000; // 
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Asegúrate de que 'uploads' sea accesible públicamente
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 
-
-// Aplicar middlewares de seguridad y configuraciones
 app.use(cors(corsOptions));
 app.use(helmetConfig);
 app.use(rateLimitConfig);
@@ -55,10 +53,9 @@ app.get('/test', (req, res) => {
     res.send('El servidor está funcionando correctamente');
 });
 
-// Sincronizar la base de datos y levantar el servidor
 sequelize.sync().then(() => {
     app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`); // Asegúrate de que imprime el puerto correcto
+        console.log(`Server is running on port ${PORT}`); 
     });
 });
 
@@ -67,4 +64,4 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error' });
 });
 
-module.exports = app; // Exportar la aplicación para pruebas o configuración adicional
+module.exports = app; 

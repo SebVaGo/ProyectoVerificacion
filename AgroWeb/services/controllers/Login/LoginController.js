@@ -9,15 +9,12 @@ exports.login = async (req, res) => {
     const { correo, clave } = req.body;
 
     try {
-        // Buscar todos los perfiles del usuario por correo
         const usuarios = await Usuario.findAll({ where: { correo } });
 
-        // Si no se encuentran usuarios con ese correo
         if (usuarios.length === 0) {
             return res.status(401).json({ error: 'El correo ingresado no está registrado.' });
         }
 
-        // Verificar la contraseña solo con el primer usuario encontrado
         const isPasswordValid = await bcrypt.compare(clave, usuarios[0].clave);
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'La contraseña es incorrecta. Inténtelo de nuevo.' });
