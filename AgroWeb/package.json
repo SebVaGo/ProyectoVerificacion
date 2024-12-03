@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
+    "test:functional": "newman run ./ci-cd/postman/AgroWebBackend-FunctionalTest.postman_collection.json -r htmlextra --reporter-htmlextra-export ./ci-cd/reports/functional-test-report.html",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
@@ -29,6 +30,8 @@
     "winston": "^3.14.2"
   },
   "devDependencies": {
+    "newman": "^6.2.1",
+    "newman-reporter-htmlextra": "^1.23.1",
     "nodemon": "^3.1.4"
   }
 }
