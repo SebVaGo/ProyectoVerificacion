@@ -505,7 +505,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Producto por categoria",
 					"request": {
 						"method": "POST",
 						"header": [],

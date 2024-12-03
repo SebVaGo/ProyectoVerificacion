@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "test:functional": "newman run ./ci-cd/postman/AgroWebBackend-FunctionalTest.postman_collection.json -r htmlextra --reporter-htmlextra-export ./ci-cd/reports/functional-test-report.html",
+    "test:functional": "newman run ./ci-cd/postman/AgroWebBackend-FunctionalTest.postman_collection.json -r htmlextra --reporter-htmlextra-export ./ci-cd/reports/postman/functional-test-report.html",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
