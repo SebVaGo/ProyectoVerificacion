@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
+    "test:performance": "jmeter -n -t ci-cd/jmeter/PerformanceTestBackend.jmx -l ci-cd/jmeter/aggregate.jtl",
+    "test:performance:report": "jmeter -g ci-cd/jmeter/aggregate.jtl -o ci-cd/reports/jmeter",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
